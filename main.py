@@ -1,29 +1,33 @@
 #
 #  Import LIBRARIES
+from typing import Any
+
+import requests
 from pydantic_ai import Agent, AgentRunResult
 
 #  Import FILES
-from models import CityInfo
 
 #  ______________________
 #
 
 
-agent: Agent[None, CityInfo] = Agent(
+agent: Agent[None, str] = Agent(
     model="google-gla:gemini-2.5-flash",
-    output_type=CityInfo,
+    instructions="Help users with cat breeds. Be concise.",
 )
 
-result: AgentRunResult[CityInfo] = agent.run_sync(user_prompt="Tell me about Tokyo")
-result.output
-# CityInfo(
-#     name='Tokyo',
-#     country='Japan',
-#     population=13960000,
-#     fun_fact='Tokyo has the most Michelin stars of any city in the world.'
-# )
+
+@agent.tool_plain
+def find_breed_info(breed_name: str) -> Any | dict[str, str]:
+    """Find information about a cat breed."""
+    response: requests.Response = requests.get(url="https://api.thecatapi.com/v1/breeds")
+    response.raise_for_status()
+    json_response = response.json()
+    for breed in json_response:
+        if breed["name"] == breed_name:
+            return breed
+    return {"error": "Breed not found"}
 
 
-print(f"{result.output.name}, {result.output.country}")
-print(f"Population: {result.output.population:,}")
-print(f"Fun fact: {result.output.fun_fact}")
+result: AgentRunResult[str] = agent.run_sync(user_prompt="Tell me about the Siamese cats.")
+print(result.output)
