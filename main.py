@@ -34,5 +34,6 @@ agent: Agent = Agent(
     instructions="You're a Python Expert. Reply in one sentence.",
 )
 
+# result = await agent.run("What is Pydantic AI?")
 result: AgentRunResult[str] = agent.run_sync(user_prompt="What is Pydantic AI?")
 print(result.output)
