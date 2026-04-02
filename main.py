@@ -14,11 +14,3 @@ agent: Agent = Agent(
 
 result: AgentRunResult[str] = agent.run_sync(user_prompt="What is Pydantic AI?")
 print(result.output)
-
-
-# def main():
-#     print("Hello from pydai-rp-w!")
-
-
-# if __name__ == "__main__":
-#     main()
