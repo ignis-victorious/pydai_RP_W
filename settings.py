@@ -17,7 +17,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     # Use validation_alias to map the .env name to your Python variable name
     # We use Field(default=...) to stop Pylance from complaining about missing arguments
-    google_api_key: str = Field(validation_alias="GOOGLE_API_KEYgit st")
+    google_api_key: str = Field(validation_alias="GEMINI_API_KEY")
 
     model_config = SettingsConfigDict(
         env_file=".env",
